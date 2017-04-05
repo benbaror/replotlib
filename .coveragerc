@@ -1,0 +1,16 @@
+[paths]
+source =
+   src/replotlib
+   */site-packages/replotlib
+
+[run]
+branch = true
+source =
+    replotlib
+    tests
+parallel = true
+
+[report]
+show_missing = true
+precision = 2
+omit = *migrations*
