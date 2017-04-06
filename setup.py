@@ -66,6 +66,8 @@ setup(
     ],
     install_requires=[
         'click',
+        'matplotlib',
+        'h5py',
     ],
     extras_require={
         # eg:

@@ -1,11 +1,11 @@
 """Provide the basic Axes class."""
-import os
-import h5py
-from functools import wraps
-import matplotlib.pyplot as plt
-from collections import OrderedDict
-from corner import corner
 import json
+import os
+from collections import OrderedDict
+from functools import wraps
+
+import h5py
+import matplotlib.pyplot as plt
 
 
 class HDF5IO(object):
@@ -227,6 +227,3 @@ class Axes(object):
 
         except KeyError:
             pass
-
-    def _corner(self, *arg, **kargs):
-        corner(*arg, **kargs)

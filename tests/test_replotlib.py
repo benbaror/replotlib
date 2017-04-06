@@ -1,11 +1,11 @@
-import numpy as np
 import os
-from replotlib import Axes
-import matplotlib.pyplot as plt
 from contextlib import contextmanager
 
+import matplotlib.pyplot as plt
+import numpy as np
 from click.testing import CliRunner
 
+from replotlib import Axes
 from replotlib.cli import main
 
 PATH = os.path.dirname(os.path.realpath(__file__))

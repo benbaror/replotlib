@@ -15,11 +15,13 @@ Why does this file exist, and why not put this in __main__?
 
   Also see (1) from http://click.pocoo.org/5/setuptools/#setuptools-integration
 """
-import click
-from . import Axes
 import json
-import matplotlib.pyplot as plt
 from collections import OrderedDict
+
+import click
+import matplotlib.pyplot as plt
+
+from . import Axes
 
 
 def replot(file_name, file_type, style={}, savefig=False, **kargs):
