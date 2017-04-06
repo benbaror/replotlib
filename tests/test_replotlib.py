@@ -1,9 +1,11 @@
 import os
 from contextlib import contextmanager
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 from click.testing import CliRunner
+from matplotlib.colors import colorConverter
 
 from replotlib import Axes
 from replotlib.cli import main
@@ -35,14 +37,12 @@ def diff(file1, file2, ignore=None):
     return None
 
 
-	# def test_json():
-	#     gen_orig()
-	#     runner = CliRunner()
-	#     runner.invoke(main, ['test.rplt'])
-	#     runner.invoke(main, ['-s', 'test.eps', 'test.rplt'])
-	#     assert diff('test.eps', 'test_orig.eps', 'CreationDate') is None
-	#     assert diff('test.eps', 'test_orig.eps',
-	#                 ['CreationDate', 'Can Ignore more than one item']) is None
+def test_json():
+    gen_orig()
+    runner = CliRunner()
+    runner.invoke(main, ['-s', PATH + '/test.eps', PATH + '/test.rplt'])
+    assert diff(PATH + '/test.eps', PATH + '/test_orig.eps',
+                ['CreationDate', 'Title']) is None
 
 
 # def test_hdf5():
@@ -54,49 +54,58 @@ def diff(file1, file2, ignore=None):
 #     assert diff('test.eps', 'test_orig.eps',
 #                 ['CreationDate', 'Can Ignore more than one item']) is None
 
+def reset_mpl():
+    mpl.rcParams.update(mpl.rcParamsDefault)
+    colorConverter.cache = {}
+
 
 def test_main():
+    reset_mpl()
     runner = CliRunner()
     runner.invoke(main, [PATH + '/test.rplt'])
 
 
 def test_main_save():
+    reset_mpl()
+    mpl.rcParams.update(mpl.rcParamsDefault)
     runner = CliRunner()
     runner.invoke(main, ['-s', PATH + '/test.eps', PATH + '/test.rplt'])
 
 
 def test_main_style():
+    reset_mpl()
+    mpl.rcParams.update(mpl.rcParamsDefault)
     runner = CliRunner()
     runner.invoke(main, ['--style_file', PATH + '/style.json', '-s',
                          PATH + '/test_styl.eps', PATH + '/test.rplt'])
 
 def test_main_bb():
+    reset_mpl()
+    mpl.rcParams.update(mpl.rcParamsDefault)
     runner = CliRunner()
-    runner.invoke(main, ['--bb', '-s', PATH + '/test_bb.eps', 
+    runner.invoke(main, ['--bb', '-s', PATH + '/test_bb.eps',
                          PATH + '/test.rplt'])
 
 
-
-
-# def gen_orig(test_file='test.rplt', file_type='json'):
-#     style = {'nice_color': {'color': 'green'}}
-#     with ignored(OSError):
-#         os.remove(test_file)
-#     print(test_file, file_type)
-#     plt.rcParams['lines.linewidth'] = 3
-#     plt.rcParams['lines.color'] = 'k'
-#     ax = Axes(test_file, file_type=file_type, style=style)
-#     ax.rcParams = {'lines.linewidth': 3,
-#                    'lines.color': 'k'}
-#     style = {'strong_color': {'color': 'blue'},
-#              'errorbar': {'fmt': 'o'}}
-#     ax.style = style
-#     x = np.linspace(0, 1)
-#     ax.plot(x, x**2, color='c', label=r'$x^2$')
-#     ax.errorbar(x, x**2, x**2*0.1)
-#     ax.plot(x, x**3, style='strong_color')
-#     ax.plot(x, x**4, style='nice_color')
-#     ax.set_xlabel('x')
-#     ax.set_ylabel('y')
-#     ax.legend()
-#     plt.savefig('test_orig.eps')
+def gen_orig(test_file= PATH + '/test.rplt', file_type='json'):
+    style = {'nice_color': {'color': 'green'}}
+    with ignored(OSError):
+        os.remove(test_file)
+    print(test_file, file_type)
+    plt.rcParams['lines.linewidth'] = 3
+    plt.rcParams['lines.color'] = 'k'
+    ax = Axes(test_file, file_type=file_type, style=style)
+    ax.rcParams = {'lines.linewidth': 3,
+                   'lines.color': 'k'}
+    style = {'strong_color': {'color': 'blue'},
+             'errorbar': {'fmt': 'o'}}
+    ax.style = style
+    x = np.linspace(0, 1)
+    ax.plot(x, x**2, color='c', label=r'$x^2$')
+    ax.errorbar(x, x**2, x**2*0.1)
+    ax.plot(x, x**3, style='strong_color')
+    ax.plot(x, x**4, style='nice_color')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.legend()
+    plt.savefig(PATH + '/test_orig.eps')
