@@ -19,40 +19,41 @@ class HDF5IO(object):
 
     def read(self):
         """Read the hdf5 file."""
-        with h5py.File(self.data_file, 'r') as f:
-            d = OrderedDict(
+        with h5py.File(self.data_file, 'r') as h5_file:
+            dct = OrderedDict(
                 sorted([(plot_function,
                          {arg_name: OrderedDict(
-                             sorted([(str(k), v[()])
-                                     for k, v in arg.items()]))
+                             sorted([(str(key), value[()])
+                                     for key, value in arg.items()]))
                           for arg_name, arg in args.items()})
-                        for plot_function, args in f.items()
+                        for plot_function, args in h5_file.items()
                         if plot_function != 'rcParams']))
-            if 'rcParams' in f:
-                d['rcParams'] = dict((key, val[()])
-                                     for key, val in f['rcParams'].items())
-        return d
+            if 'rcParams' in h5_file:
+                dct['rcParams'] = dict((key, val[()])
+                                       for key, val in
+                                       h5_file['rcParams'].items())
+        return dct
 
     def save(self, name, plot_object):
         """Save a plot object to the hdf5 file."""
-        with h5py.File(self.data_file) as f:
-            plot_object_group = f.require_group(name)
+        with h5py.File(self.data_file) as h5_file:
+            plot_object_group = h5_file.require_group(name)
             if name == 'rcParams':
-                for param, v in plot_object.items():
-                    plot_object_group[param] = v
+                for param, value in plot_object.items():
+                    plot_object_group[param] = value
 
             elif name == 'style':
                 for style, dct in plot_object.items():
                     style_group = plot_object_group.require_group(style)
-                    for k, v in plot_object[style].items():
-                        style_group[k] = v
+                    for key, value in dct.items():
+                        style_group[key] = value
             else:
                 args_group = plot_object_group.require_group('args')
                 kwargs_group = plot_object_group.require_group('kwargs')
-                for k, arg in plot_object['args'].items():
-                    args_group[str(k)] = arg
-                for k, v in plot_object['kwargs'].items():
-                    kwargs_group[str(k)] = v
+                for key, arg in plot_object['args'].items():
+                    args_group[str(key)] = arg
+                for key, value in plot_object['kwargs'].items():
+                    kwargs_group[str(key)] = value
 
 
 class JsonIO(object):
@@ -71,14 +72,14 @@ class JsonIO(object):
 
     def save(self, name, dct_obj):
         if name not in ('style', 'rcParams'):
-            for key, v in dct_obj['args'].items():
+            for key, value in dct_obj['args'].items():
                 try:
-                    dct_obj['args'][key] = v.tolist()
+                    dct_obj['args'][key] = value.tolist()
                 except AttributeError:
                     pass
-            for key, v in dct_obj['kwargs'].items():
+            for key, value in dct_obj['kwargs'].items():
                 try:
-                    dct_obj['kwargs'][key] = v.tolist()
+                    dct_obj['kwargs'][key] = value.tolist()
                 except AttributeError:
                     pass
 
@@ -88,8 +89,8 @@ class JsonIO(object):
         except IOError:
             data = {}
         data.update(dct)
-        with open(self.data_file, 'w') as f:
-            json.dump(data, f, sort_keys=True,
+        with open(self.data_file, 'w') as json_file:
+            json.dump(data, json_file, sort_keys=True,
                       indent=0, separators=(',', ': '))
 
 
@@ -102,8 +103,8 @@ class Axes(object):
     it for latter re-plotting.
     """
 
-    def __init__(self, data_file, ax=None, file_type='json', style={},
-                 rcParams={}, erase=True):
+    def __init__(self, data_file, ax=None, file_type='json', style=None,
+                 rcParams=None, erase=True):
         """
         Save matplotlib command for later reuse.
 
@@ -119,13 +120,13 @@ class Axes(object):
         self._action_number = 0
         self.file_type = file_type
         self.data_file = data_file
-        self._style = style
-        self._rcParams = rcParams
+        self._style = style if style else {}
+        self._rcParams = rcParams if rcParams else {}
 
         if erase:
             try:
                 os.remove(self.data_file)
-            except:
+            except OSError:
                 pass
 
         if file_type == 'json':

@@ -24,7 +24,7 @@ import matplotlib.pyplot as plt
 from . import Axes
 
 
-def replot(file_name, file_type, style={}, savefig=False, **kargs):
+def replot(file_name, file_type, style=None, savefig=False, **kargs):
     plt.figure()
     Axes(file_name, file_type=file_type, style=style,
          erase=False).replot()
