@@ -38,21 +38,20 @@ def diff(file1, file2, ignore=None):
 
 
 def test_json():
-    gen_orig()
+    gen_orig(PATH + '/test.rplt', 'json')
     runner = CliRunner()
     runner.invoke(main, ['-s', PATH + '/test.eps', PATH + '/test.rplt'])
     assert diff(PATH + '/test.eps', PATH + '/test_orig.eps',
                 ['CreationDate', 'Title']) is None
 
 
-# def test_hdf5():
-#     gen_orig('test_h5.rplt', 'hdf5')
-#     runner = CliRunner()
-#     runner.invoke(main, ['test.rplt'])
-#     runner.invoke(main, ['-s', 'test.eps', 'test.rplt'])
-#     assert diff('test.eps', 'test_orig.eps', 'CreationDate') is None
-#     assert diff('test.eps', 'test_orig.eps',
-#                 ['CreationDate', 'Can Ignore more than one item']) is None
+def test_hdf5():
+    gen_orig(PATH + '/test_h5.rplt', 'hdf5')
+    runner = CliRunner()
+    runner.invoke(main, ['-s', PATH + '/test_h5.eps', PATH + '/test_h5.rplt'])
+    assert diff(PATH + '/test_h5.eps', PATH + '/test_h5_orig.eps',
+                ['CreationDate', 'Title']) is None
+
 
 def reset_mpl():
     mpl.rcParams.update(mpl.rcParamsDefault)
@@ -87,7 +86,9 @@ def test_main_bb():
                          PATH + '/test.rplt'])
 
 
-def gen_orig(test_file= PATH + '/test.rplt', file_type='json'):
+def gen_orig(test_file=PATH + '/test.rplt', file_type='json'):
+    reset_mpl()
+    plt.figure()
     style = {'nice_color': {'color': 'green'}}
     with ignored(OSError):
         os.remove(test_file)
@@ -108,4 +109,5 @@ def gen_orig(test_file= PATH + '/test.rplt', file_type='json'):
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.legend()
-    plt.savefig(PATH + '/test_orig.eps')
+    plt.savefig(test_file.replace('.rplt', '_orig.eps'))
+    reset_mpl()
