@@ -41,16 +41,18 @@ def test_json():
     gen_orig(PATH + '/test.rplt', 'json')
     runner = CliRunner()
     runner.invoke(main, ['-s', PATH + '/test.eps', PATH + '/test.rplt'])
-    assert diff(PATH + '/test.eps', PATH + '/test_orig.eps',
-                ['CreationDate', 'Title']) is None
+    diff_from_origin = diff(PATH + '/test.eps', PATH + '/test_orig.eps',
+                            ['CreationDate', 'Title'])
+    assert diff_from_origin is None
 
 
 def test_hdf5():
     gen_orig(PATH + '/test_h5.rplt', 'hdf5')
     runner = CliRunner()
     runner.invoke(main, ['-s', PATH + '/test_h5.eps', PATH + '/test_h5.rplt'])
-    assert diff(PATH + '/test_h5.eps', PATH + '/test_h5_orig.eps',
-                ['CreationDate', 'Title']) is None
+    diff_from_origin = diff(PATH + '/test_h5.eps', PATH + '/test_h5_orig.eps',
+                            ['CreationDate', 'Title'])
+    assert diff_from_origin is None
 
 
 def reset_mpl():
