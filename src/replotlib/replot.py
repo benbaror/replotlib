@@ -120,38 +120,31 @@ class Axes(object):
         self._action_number = 0
         self.file_type = file_type
         self.data_file = data_file
-        self._style = style if style else {}
-        self._rcParams = rcParams if rcParams else {}
 
         if erase:
-            try:
-                os.remove(self.data_file)
-            except OSError:
-                pass
+            self.clean()
 
-        if file_type == 'json':
+        if self.file_type == 'json':
             self.io = JsonIO(self.data_file)
-        elif file_type == 'hdf5':
+        elif self.file_type == 'hdf5':
             self.io = HDF5IO(self.data_file)
         else:
             raise NotImplementedError(self.file_type)
 
-        try:
-            style = self.io.read()['style']
-            style.update(self._style)
-            self._style = style
-        except (IOError, KeyError):
-            pass
-
-        try:
-            rcParams = self.io.read()['rcParams']
-            rcParams.update(self._rcParams)
-            self._rcParams = rcParams
-        except (IOError, KeyError):
-            pass
+        self._style = self.update('style', style)
+        self._rcParams = self.update('rcParams', rcParams)
 
         plt.rcParams.update(self.rcParams)
         self._ax = ax if ax else plt.gca()
+
+    def clean(self):
+        """
+        Delete the file
+        """
+        try:
+            os.remove(self.data_file)
+        except OSError:
+            pass
 
     @property
     def action_number(self):
@@ -228,3 +221,15 @@ class Axes(object):
 
         except KeyError:
             pass
+
+    def update(self, ex_dict, new_dict):
+        """
+        Updated existing dictionary named `ex_dict` in database with `new_dict`
+        """
+        new_dict = new_dict if new_dict else {}
+        try:
+            dct = self.io.read()[ex_dict]
+            dct.update(new_dict)
+            return dct
+        except (IOError, KeyError):
+            return new_dict
