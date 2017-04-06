@@ -26,9 +26,9 @@ Overview
     :alt: Requirements Status
     :target: https://requires.io/github/benbaror/replotlib/requirements/?branch=master
 
-.. |coveralls| image:: https://coveralls.io/repos/benbaror/replotlib/badge.svg?branch=master&service=github
+.. |coveralls| image:: https://coveralls.io/repos/github/benbaror/replotlib/badge.svg?branch=master
     :alt: Coverage Status
-    :target: https://coveralls.io/r/benbaror/replotlib
+    :target: https://coveralls.io/github/benbaror/replotlib?branch=master
 
 .. |codecov| image:: https://codecov.io/github/benbaror/replotlib/coverage.svg?branch=master
     :alt: Coverage Status
@@ -38,10 +38,10 @@ Overview
     :target: https://landscape.io/github/benbaror/replotlib/master
     :alt: Code Quality Status
 
-.. |codacy| image:: https://img.shields.io/codacy/REPLACE_WITH_PROJECT_ID.svg?style=flat
-    :target: https://www.codacy.com/app/benbaror/replotlib
+.. |codacy| image:: https://api.codacy.com/project/badge/Grade/f65e0b1e9311416694cca4dbdb06b1b6 
+    :target: https://www.codacy.com/app/benbaror/replotlib?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=benbaror/replotlib&amp;utm_campaign=Badge_Grade
     :alt: Codacy Code Quality Status
-
+   
 .. |codeclimate| image:: https://codeclimate.com/github/benbaror/replotlib/badges/gpa.svg
    :target: https://codeclimate.com/github/benbaror/replotlib
    :alt: CodeClimate Quality Status
