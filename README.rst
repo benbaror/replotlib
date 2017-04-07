@@ -13,7 +13,29 @@ Overview
       - | |travis| |requires|
         | |coveralls| |codecov|
         | |landscape| |scrutinizer| |codacy| |codeclimate|
+    * - package
+      - |version| |downloads| |wheel| |supported-versions| |supported-implementations|
 
+.. |version| image:: https://img.shields.io/pypi/v/replotlib.svg?style=flat
+    :alt: PyPI Package latest release
+    :target: https://pypi.python.org/pypi/replotlib
+
+.. |downloads| image:: https://img.shields.io/pypi/dm/replotlib.svg?style=flat
+    :alt: PyPI Package monthly downloads
+    :target: https://pypi.python.org/pypi/replotlib
+
+.. |wheel| image:: https://img.shields.io/pypi/wheel/replotlib.svg?style=flat
+    :alt: PyPI Wheel
+    :target: https://pypi.python.org/pypi/replotlib
+
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/replotlib.svg?style=flat
+    :alt: Supported versions
+    :target: https://pypi.python.org/pypi/replotlib
+
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/replotlib.svg?style=flat
+    :alt: Supported implementations
+    :target: https://pypi.python.org/pypi/replotlib
+ 
 .. |docs| image:: https://readthedocs.org/projects/replotlib/badge/?style=flat
     :target: https://readthedocs.org/projects/replotlib
     :alt: Documentation Status
